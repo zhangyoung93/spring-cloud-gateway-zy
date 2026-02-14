@@ -1,0 +1,67 @@
+[
+    {
+        //路由策略的唯一ID
+        "id": "authentication-route",
+        //路由的目标地址：lb表示使用负载均衡，后边的地址是注册中心的服务名
+        "uri": "lb://authentication-service",
+        //路由的源地址
+        "predicates": [
+            {
+                "name": "Path",
+                "args": {
+                    "_genkey_0": "/api/authentication/**"
+                }
+            }
+        ],
+        //过滤器
+        "filters": [
+            {
+                //剔除源地址的第一段前缀，即/api
+                "name": "StripPrefix",
+                "args": {
+                    "_genkey_0": "1"
+                }
+            },
+            {
+                //使用gateway内置的基于Redis实现的请求限流过滤器
+                "name": "RequestRateLimiter",
+                "args": {
+                    //允许每秒生成10个TOKEN，即稳定QPS=10
+                    "redis-rate-limiter.replenishRate": "10",
+                    //允许的最大瞬时QPS=20
+                    "redis-rate-limiter.burstCapacity": "20",
+                    //限流条件，此处是自定义的Bean：remoteAddrKeyResolver
+                    "key-resolver": "#{@remoteAddrKeyResolver}"
+                }
+            }
+        ]
+    },
+    {
+        "id": "identity-route",
+        "uri": "lb://identity-service",
+        "predicates": [
+            {
+                "name": "Path",
+                "args": {
+                    "_genkey_0": "/api/identity/**"
+                }
+            }
+        ],
+        "filters": [
+            {
+                "name": "StripPrefix",
+                "args": {
+                    "_genkey_0": "1"
+                }
+            },
+            {
+                "name": "RequestRateLimiter",
+                "args": {
+                    "redis-rate-limiter.replenishRate": "10",
+                    "redis-rate-limiter.burstCapacity": "20",
+                    "key-resolver": "#{@remoteAddrKeyResolver}"
+                }
+            }
+        ]
+    }
+]

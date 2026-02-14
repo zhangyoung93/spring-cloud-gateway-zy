@@ -1,5 +1,91 @@
 server:
-  port: 8083
+  port: 9080
 spring:
   application:
     name: spring-cloud-gateway-zy
+  config:
+    import: nacos:${spring.application.name}.yaml
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      server-addr: localhost:8848
+      config:
+        enabled: true
+        namespace: prod-env
+      discovery:
+        #网关也要注册nacos，配合负载均衡发现路由的目标服务，nacos新版本的discovery带负载均衡依赖
+        enabled: true
+        #必须注册到路由目标服务的命名空间
+        namespace: namespace-zy
+
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              #关闭自动路由
+              enabled: false
+          routes:
+            #路由策略的唯一ID
+            - id: java-web-zy
+              #路由的目标地址：lb表示使用负载均衡，后边的地址是注册中心的服务名
+              uri: lb://java-web-zy
+              #路由的源地址
+              predicates:
+                - Path=/api/zy/**
+              #过滤器。
+              filters:
+                #简写方式。剔除源地址的第一段前缀
+                - StripPrefix=1
+                #使用gateway内置的基于Redis实现的请求限流过滤器必须注意大小写。RequestRateLimiterGatewayFilterFactory
+                - name: RequestRateLimiter
+                  args:
+                    #redis的key ttl=burstCapacity/replenishRate，所以生存时间一般很短，看不到key存在
+                    #允许每秒生成10个TOKEN，即稳定QPS=10
+                    redis-rate-limiter.replenishRate: 10
+                    #允许的最大瞬时QPS=20
+                    redis-rate-limiter.burstCapacity: 20
+                    #限流条件，此处是自定义的Bean：remoteAddrKeyResolver
+                    key-resolver: "#{@remoteAddrKeyResolver}"
+          #设置超时时间，防止网关线程耗尽
+          httpclient:
+            connect-timeout: 2000
+            response-timeout: 5000ms
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: ENC(TUjeJQU0g3pGZqbYlDw8mHilUTdV+M1XlYZGeBc7WYg=)
+      timeout: 2000ms
+      database: 0
+
+#actuator
+management:
+  endpoints:
+    web:
+      #修改默认的访问路径
+      base-path: /actuator/monitor
+    access:
+      #禁止访问所有节点
+      default: none
+  endpoint:
+    #打开health、metrics节点，为k8s、docker等容器化技术提供探针
+    health:
+      access: unrestricted
+    metrics:
+      access: unrestricted
+
+logging:
+  level:
+    org.springframework.cloud.gateway: WARN
+
+#配置加密
+jasypt:
+  encryptor:
+    #密钥（生产环境要隐藏，换成其它方式）
+    password: zySecret
+    #加密算法（默认PBEWITHHMACSHA512ANDAES_256，需要验证兼容性）
+    algorithm: PBEWithMD5AndDES
+    #向量生成类（确保相同的明文加密后生成不同的密文，增强安全性），默认随机生成。
+    iv-generator-classname: org.jasypt.iv.RandomIvGenerator
