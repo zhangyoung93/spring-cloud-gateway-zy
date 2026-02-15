@@ -13,6 +13,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -60,6 +61,11 @@ public class AuthGlobalFilter implements GlobalFilter {
             return chain.filter(exchange);
         }
 
+        //OPTION请求跳过鉴权
+        if (HttpMethod.OPTIONS.toString().equalsIgnoreCase(request.getMethod().name())) {
+            return chain.filter(exchange);
+        }
+
         //获取JWT
         String token = null;
         List<String> authorizationList = request.getHeaders().get("Authorization");
@@ -78,7 +84,7 @@ public class AuthGlobalFilter implements GlobalFilter {
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             response.getHeaders().add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
             BaseResponse<Object> baseResponse = BaseResponse.build(ResponseEnum.AUTH_FAIL.getCode(), ResponseEnum.AUTH_FAIL.getMsg() + "token验证不通过!", null);
-            String body = "Unauthorized";
+            String body = "{\"code\":401,\"msg\":\"Unauthorized\"}";
             try {
                 body = this.objectMapper.writeValueAsString(baseResponse);
             } catch (JsonProcessingException e) {

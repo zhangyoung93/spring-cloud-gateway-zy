@@ -85,7 +85,7 @@ jasypt:
   encryptor:
     #密钥（生产环境要隐藏，换成其它方式）
     password: zySecret
-    #加密算法（默认PBEWITHHMACSHA512ANDAES_256，需要验证兼容性）
+    #加密算法
     algorithm: PBEWithMD5AndDES
     #向量生成类（确保相同的明文加密后生成不同的密文，增强安全性），默认随机生成。
     iv-generator-classname: org.jasypt.iv.RandomIvGenerator
@@ -101,3 +101,31 @@ filter:
     #跳过鉴权（请求源的完整路径）
     excludes:
       - /api/zy/sso/login
+
+#自定义跨域配置
+cors:
+  #允许跨域请求的源
+  origins:
+    - "http://localhost:9080"
+    - "https://www.web-front.com"
+  #允许跨域请求的方法
+  methods:
+    - GET
+    - POST
+    - PATCH
+    - PUT
+    - DELETE
+    - HEAD
+    - OPTIONS
+  #允许跨域请求的请求头
+  headers:
+    - "Authorization"
+    - "Content-Type"
+    - "Accept"
+    - "Origin"
+    - "X-Requested-With"
+    - "X-Request-ID"
+    - "X-Correlation-ID"
+    - "Cache-Control"
+    - "X-Tenant-ID"
+
