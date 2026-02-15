@@ -21,13 +21,16 @@ public class BaseResponse<T> {
     // 数据
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
+    //时间戳
+    private Long timestamp;
 
     @Override
     public String toString() {
         return "BaseResponse{" +
-                "code='" + code + '\'' +
+                "code=" + code +
                 ", msg='" + msg + '\'' +
                 ", data=" + data +
+                ", timestamp=" + timestamp +
                 '}';
     }
 
@@ -35,6 +38,7 @@ public class BaseResponse<T> {
         BaseResponse<T> baseResponse = new BaseResponse<>();
         baseResponse.setCode(code);
         baseResponse.setMsg(msg);
+        baseResponse.setTimestamp(System.currentTimeMillis());
         if (data != null) {
             baseResponse.setData(data);
         }

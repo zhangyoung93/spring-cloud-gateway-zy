@@ -1,5 +1,10 @@
 server:
   port: 9080
+  #关闭默认的错误信息
+  error:
+    include-message: never
+    include-binding-errors: never
+
 spring:
   application:
     name: spring-cloud-gateway-zy

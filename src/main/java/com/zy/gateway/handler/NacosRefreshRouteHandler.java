@@ -36,13 +36,11 @@ public class NacosRefreshRouteHandler {
 
     private final Map<String, Boolean> routeIdMap = new ConcurrentHashMap<>(64);
 
-
     public NacosRefreshRouteHandler(RouteDefinitionWriter routeDefinitionWriter, ApplicationEventPublisher applicationEventPublisher, ObjectMapper objectMapper) {
         this.routeDefinitionWriter = routeDefinitionWriter;
         this.applicationEventPublisher = applicationEventPublisher;
         this.objectMapper = objectMapper;
     }
-
 
     /**
      * 监听Nacos路由配置修改行为
