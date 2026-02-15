@@ -89,3 +89,15 @@ jasypt:
     algorithm: PBEWithMD5AndDES
     #向量生成类（确保相同的明文加密后生成不同的密文，增强安全性），默认随机生成。
     iv-generator-classname: org.jasypt.iv.RandomIvGenerator
+
+#自定义过滤配置
+filter:
+  #鉴权
+  auth:
+    #JWT密钥（32字节，此处由Base64随机生成）
+    jwt-secret-key: "eKgstrRR5gYHNDQ39L6xRhoM2a4sIcOnl6pYzEa2Bos="
+    #jwt过期时间，单位毫秒
+    jwt-expire-time: 3600000
+    #跳过鉴权（请求源的完整路径）
+    excludes:
+      - /api/zy/sso/login

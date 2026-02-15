@@ -44,10 +44,16 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
 
     implementation("org.apache.commons:commons-lang3:3.18.0")
+    implementation("org.apache.commons:commons-collections4:4.5.0")
 
     implementation("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config")
     implementation("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery")
     implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5")
+
+    //JWT
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
+    implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
     compileOnly("org.projectlombok:lombok")
 
