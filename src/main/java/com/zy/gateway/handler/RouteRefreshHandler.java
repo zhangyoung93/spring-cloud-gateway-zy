@@ -1,6 +1,5 @@
 package com.zy.gateway.handler;
 
-import com.alibaba.cloud.nacos.annotation.NacosConfigListener;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,13 +19,13 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Nacos刷新路由处理类
+ * 路由刷新处理类
  *
  * @author zy
  */
 @Slf4j
 @Component
-public class NacosRefreshRouteHandler {
+public class RouteRefreshHandler {
 
     private final RouteDefinitionWriter routeDefinitionWriter;
 
@@ -36,26 +35,20 @@ public class NacosRefreshRouteHandler {
 
     private final Map<String, Boolean> routeIdMap = new ConcurrentHashMap<>(64);
 
-    public NacosRefreshRouteHandler(RouteDefinitionWriter routeDefinitionWriter, ApplicationEventPublisher applicationEventPublisher, ObjectMapper objectMapper) {
+    public RouteRefreshHandler(RouteDefinitionWriter routeDefinitionWriter, ApplicationEventPublisher applicationEventPublisher, ObjectMapper objectMapper) {
         this.routeDefinitionWriter = routeDefinitionWriter;
         this.applicationEventPublisher = applicationEventPublisher;
         this.objectMapper = objectMapper;
     }
 
-    /**
-     * 监听Nacos路由配置修改行为
-     *
-     * @param jsonStr nacos配置文件内容
-     */
-    @NacosConfigListener(dataId = "gateway-routes", group = "DEFAULT_GROUP")
-    public void onRouteConfigChange(String jsonStr) {
-        if (StringUtils.isBlank(jsonStr)) {
+    public void updateRoutesRule(String configInfo) {
+        if (StringUtils.isBlank(configInfo)) {
             log.warn("gateway-routes json is empty");
             return;
         }
         try {
             //配置内容转换成对象，顺便检查JSON语法
-            List<RouteDefinition> routeDefinitionList = this.objectMapper.readValue(jsonStr, new TypeReference<>() {
+            List<RouteDefinition> routeDefinitionList = this.objectMapper.readValue(configInfo, new TypeReference<>() {
             });
             //保存新路由
             Set<String> newRouteIdSet = new HashSet<>();

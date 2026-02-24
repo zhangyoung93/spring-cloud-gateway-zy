@@ -1,0 +1,34 @@
+[
+    {
+        //资源名称(routeId或API分组名称)
+        "resource": "java-web-zy",
+        //资源模式(0：routeId / 1：API分组)
+        "resourceMode": 0,
+        //阈值(QPS)
+        "count": 50,
+        //统计时间窗口(秒)，默认是1秒
+        "intervalSec": 1,
+        //控制行为(0：快速失败，默认 / 1：匀速排队 / 2：预热启动 / 3、预热+排队)
+        "controlBehavior": 0,
+        //瞬时阈值(仅controlBehavior=0时有效)
+        "burst": 0,
+        //最大排队超时时间(单位毫秒，controlBehavior=1时生效)
+        "maxQueueingTimeoutMs": 0
+    },
+    {
+        //资源名称(routeId或API分组名称)
+        "resource": "api-batch-data-save-user",
+        //资源模式(0：routeId / 1：API分组)
+        "resourceMode": 1,
+        //阈值(QPS)
+        "count": 1,
+        //统计时间窗口(秒)，默认是1秒
+        "intervalSec": 1,
+        //控制行为(0：快速失败，默认 / 1：匀速排队 / 2：预热启动 / 3、预热+排队)
+        "controlBehavior": 0,
+        //瞬时阈值(仅controlBehavior=0时有效)
+        "burst": 0,
+        //最大排队超时时间(单位毫秒，controlBehavior=1时生效)
+        "maxQueueingTimeoutMs": 0
+    }
+]

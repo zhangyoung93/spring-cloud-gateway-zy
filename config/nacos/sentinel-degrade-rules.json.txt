@@ -1,0 +1,20 @@
+[
+    {
+        //资源名称(routeId)
+        "resource": "java-web-zy",
+        //来源应用：default=所有应用，可指定具体应用名
+        "limitApp": "default",
+        //熔断时长(秒)(触发熔断后，多少秒内拒绝请求，如10秒)
+        "timeWindow": 10,
+        //最小请求数(在统计窗口内至少有多少请求才触发熔断判断，默认5)
+        "minRequestAmount": 5,
+        //统计窗口时长(毫秒)，默认1000ms
+        "statIntervalMs": 1000,
+        //降级策略(0：最大响应时间(推荐) / 1：异常比例 / 2：异常数)
+        "grade": 0,
+        //阈值(grade=0：最大RT(毫秒) / grade=1：异常比例(0.0 ~ 1.0) / grade=2：异常数)
+        "count": 200,
+        //慢调用比例阈值(仅grade=0时有效，如0.5表示超过50%请求慢于count就熔断)
+        "slowRatioThreshold": 0.5
+    }
+]

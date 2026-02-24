@@ -21,7 +21,7 @@ import java.net.InetSocketAddress;
  */
 @Slf4j
 @Component
-public class LoggingFilter implements GlobalFilter {
+public class LoggingGlobalFilter implements GlobalFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {

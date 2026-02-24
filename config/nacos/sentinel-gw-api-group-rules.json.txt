@@ -1,0 +1,24 @@
+[
+    {
+        //API分组名称
+        "apiName": "api-batch-data-save-user",
+        //匹配条件列表
+        "predicateItems": [
+            {
+                //精确匹配
+                "pattern": "/api/zy/batch/data/save/user",
+                "matchStrategy": 0
+            }
+        ]
+    },
+    {
+        "apiName": "api-auth",
+        "predicateItems": [
+            {
+                //前缀匹配
+                "pattern": "/api/zy/auth/**",
+                "matchStrategy": 1
+            }
+        ]
+    }
+]
