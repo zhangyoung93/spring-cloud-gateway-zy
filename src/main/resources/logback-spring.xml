@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--JSON结构化日志配置-->
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!--Logstash JSON编码器，将日志转换为JSON格式-->
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <!--定义JSON中的字段-->
+            <providers>
+                <!--时间戳，UTC时间-->
+                <timestamp>
+                    <!--字段名称由@timestamp改为timestamp-->
+                    <fieldName>timestamp</fieldName>
+                    <pattern>yyyy-MM-dd'T'HH:mm:ss.SSS</pattern>
+                    <timeZone>Asia/Shanghai</timeZone>
+                </timestamp>
+                <!--日志级别-->
+                <logLevel/>
+                <!--日志记录器类名-->
+                <loggerName/>
+                <!--日志内容，例如log.info(message)-->
+                <message/>
+                <!--MDC注入自定义日志字段-->
+                <mdc/>
+                <!--error日志，记录完整的堆栈信息-->
+                <stackTrace/>
+                <!--固定字段-->
+                <staticField>
+                    <!--此次添加当前服务名称-->
+                    <fieldName>service</fieldName>
+                    <fieldValue>spring-cloud-gateway-zy</fieldValue>
+                </staticField>
+            </providers>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

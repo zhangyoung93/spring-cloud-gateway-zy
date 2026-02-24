@@ -39,16 +39,19 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-gateway-server-webflux")
     //网关必须引入负载均衡，否则无法发现服务
     implementation("org.springframework.cloud:spring-cloud-starter-loadbalancer")
-
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
 
     implementation("org.apache.commons:commons-lang3:3.18.0")
     implementation("org.apache.commons:commons-collections4:4.5.0")
+    implementation("org.apache.skywalking:apm-toolkit-trace:9.4.0")
 
     implementation("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config")
     implementation("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery")
+
     implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5")
+
+    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
 
     //JWT
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")

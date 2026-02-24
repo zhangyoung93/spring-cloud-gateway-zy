@@ -82,8 +82,7 @@ management:
       access: unrestricted
 
 logging:
-  level:
-    org.springframework.cloud.gateway: WARN
+  config: classpath:logback-spring.xml
 
 #配置加密
 jasypt:

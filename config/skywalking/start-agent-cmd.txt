@@ -1,0 +1,1 @@
+-javaagent:../skywalking-agent.jar -Dskywalking.agent.service_name=spring-cloud-gateway-zy
